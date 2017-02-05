@@ -13,10 +13,6 @@
  */
 package org.meteoinfo.layer;
 
-import com.l2fprod.common.beans.BaseBeanInfo;
-import org.meteoinfo.global.Extent;
-import org.meteoinfo.global.util.GlobalUtil;
-import org.meteoinfo.shape.ShapeTypes;
 import java.awt.Color;
 import java.awt.Image;
 import java.awt.image.BufferedImage;
@@ -31,9 +27,17 @@ import java.io.FileWriter;
 import java.io.IOException;
 import java.io.InputStreamReader;
 import java.util.ArrayList;
+import java.util.HashMap;
 import java.util.List;
+import java.util.Map;
 import java.util.logging.Level;
 import java.util.logging.Logger;
+
+import org.meteoinfo.global.Extent;
+import org.meteoinfo.global.util.GlobalUtil;
+import org.meteoinfo.shape.ShapeTypes;
+
+import com.l2fprod.common.beans.BaseBeanInfo;
 
 /**
  *
@@ -378,6 +382,44 @@ public class ImageLayer extends MapLayer {
             sr.close();
 
             return colors;
+        } catch (FileNotFoundException ex) {
+            Logger.getLogger(ImageLayer.class.getName()).log(Level.SEVERE, null, ex);
+            return null;
+        } catch (IOException ex) {
+            Logger.getLogger(ImageLayer.class.getName()).log(Level.SEVERE, null, ex);
+            return null;
+        }
+    }
+    
+    /**
+     * Get colors from palette file
+     *
+     * @param pFile Palette file path
+     * @return Map<Integer,Color>  色值 <==> 颜色对象
+     */
+    public Map<Integer,Color> getColorsMapFromPaletteFile(String pFile) {
+        BufferedReader sr = null;
+        try {
+            sr = new BufferedReader(new InputStreamReader(new FileInputStream(pFile)));
+            sr.readLine();
+            String aLine = sr.readLine();
+            String[] dataArray;
+            Map<Integer,Color> result = new HashMap<Integer,Color>();
+            while (aLine != null) {
+                if (aLine.isEmpty()) {
+                    aLine = sr.readLine();
+                    continue;
+                }
+
+                aLine = aLine.trim();
+                dataArray = aLine.split("\\s+");
+                result.put(Integer.parseInt(dataArray[0]),new Color(Integer.parseInt(dataArray[3]), Integer.parseInt(dataArray[2]),
+                        Integer.parseInt(dataArray[1])));
+                aLine = sr.readLine();
+            }
+            sr.close();
+
+            return result;
         } catch (FileNotFoundException ex) {
             Logger.getLogger(ImageLayer.class.getName()).log(Level.SEVERE, null, ex);
             return null;

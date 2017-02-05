@@ -13,25 +13,30 @@
  */
 package org.meteoinfo.layer;
 
-import com.l2fprod.common.beans.BaseBeanInfo;
-import org.meteoinfo.global.Extent;
-import org.meteoinfo.global.MIMath;
-import org.meteoinfo.legend.LegendScheme;
-import org.meteoinfo.shape.ShapeTypes;
 import java.awt.Color;
 import java.awt.image.BufferedImage;
 import java.io.File;
 import java.io.IOException;
 import java.util.List;
+import java.util.Map;
 import java.util.logging.Level;
 import java.util.logging.Logger;
+
 import javax.swing.JFileChooser;
 import javax.swing.JOptionPane;
+
 import org.meteoinfo.data.GridArray;
+import org.meteoinfo.global.Extent;
 import org.meteoinfo.global.GenericFileFilter;
+import org.meteoinfo.global.MIMath;
 import org.meteoinfo.global.util.GlobalUtil;
+import org.meteoinfo.legend.LegendScheme;
 import org.meteoinfo.legend.LegendType;
+import org.meteoinfo.shape.ShapeTypes;
+
 import ucar.ma2.Index;
+
+import com.l2fprod.common.beans.BaseBeanInfo;
 
 /**
  *
@@ -250,6 +255,34 @@ public class RasterLayer extends ImageLayer {
 
         return aImage;
     }
+    
+    /**
+     * 
+     * @Title: getImageFromGridDataAndColorMap
+     * @Description: 通过grid数据和颜色集合获取BufferedImage对象
+     * @param gdata
+     * @param colors
+     * @return  BufferedImage
+     */
+    private BufferedImage getImageFromGridDataAndColorMap(GridArray gdata, Map<Integer,Color> colors) {
+        int width, height;
+        width = gdata.getXNum();
+        height = gdata.getYNum();
+        BufferedImage aImage = new BufferedImage(width, height, BufferedImage.TYPE_INT_ARGB);
+        int oneValue;
+        Color oneColor;
+        int n = colors.size();
+        for (int i = 0; i < height; i++) {
+            for (int j = 0; j < width; j++) {
+                oneValue = gdata.getValue(i, j).intValue();
+                oneColor = colors.get(oneValue);
+                if(oneColor == null) continue;
+                aImage.setRGB(j, height - i - 1, oneColor.getRGB());
+            }
+        }
+
+        return aImage;
+    }
 
     /**
      * Set color palette to a image from a palette file
@@ -258,8 +291,10 @@ public class RasterLayer extends ImageLayer {
      */
     @Override
     public void setPalette(String aFile) {
-        List<Color> colors = this.getColorsFromPaletteFile(aFile);
-        BufferedImage image = this.getImageFromGridData(_gridData, colors);
+//        List<Color> colors = this.getColorsFromPaletteFile(aFile);
+//        BufferedImage image = this.getImageFromGridData(_gridData, colors);
+        Map<Integer,Color> colors = this.getColorsMapFromPaletteFile(aFile);
+        BufferedImage image = this.getImageFromGridDataAndColorMap(_gridData, colors);
         this.setImage(image);
 
         LegendScheme ls = new LegendScheme(ShapeTypes.Image);

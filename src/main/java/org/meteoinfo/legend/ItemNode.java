@@ -41,7 +41,7 @@ public abstract class ItemNode {
     public ItemNode() {        
         _isExpanded = false;
         _checked = true;
-        _backColor = new Color(0,0,0,0);//Color.white;
+        _backColor = Color.white;
         _foreColor = Color.black;
         _selected = false;
     }
