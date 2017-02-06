@@ -197,7 +197,7 @@ public class ColorBreak {
         this.tag = value;
     }
 
-    // </editor-fold>
+	// </editor-fold>
     // <editor-fold desc="Methods">
     /**
      * Get property object
@@ -226,7 +226,6 @@ public class ColorBreak {
         aCB.setNoData(_isNoData);
         aCB.setStartValue(_startValue);
         aCB.setTag(tag);
-
         return aCB;
     }
 

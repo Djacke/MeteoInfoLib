@@ -72,6 +72,8 @@ public class TestDrawImage {
 //		mapView.setOpaque(false);
 //		---- 设置Layout
 		mapLayout.setPaperSize(540, 550);
+//		mapLayout.setPaperSize(267, 267);
+		
 //		---- 添加地图图层
 //		mapFrame.addLayer(bou2Layer);
 //		mapFrame.addLayer(bou1Layer);
@@ -114,8 +116,6 @@ public class TestDrawImage {
 
 		//---- 获取云图格点数据
 		GridData gData = mid.getGridData("var");
-//		GridData tempGrid = new GridData();
-//		tempGrid.setValue(gData);
 		//---- 生成云图图层
 		RasterLayer cloudLayer = DrawMeteoData.createRasterLayer(gData, "Cloud", palfn);
 		

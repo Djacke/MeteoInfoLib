@@ -378,7 +378,7 @@ public class LegendScheme {
     public List<Color> getColors() {
         List<Color> colors = new ArrayList<>();
         for (int i = 0; i < legendBreaks.size(); i++) {
-            colors.add(legendBreaks.get(i).getColor());
+        	colors.add(legendBreaks.get(i).getColor());
         }
 
         return colors;

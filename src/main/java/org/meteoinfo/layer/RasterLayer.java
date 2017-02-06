@@ -249,6 +249,7 @@ public class RasterLayer extends ImageLayer {
             for (int j = 0; j < width; j++) {
                 oneValue = gdata.getValue(i, j).intValue();
                 oneColor = colors.get(oneValue);
+                if(oneValue < 256 && oneColor.equals(Color.BLACK)) continue;
                 aImage.setRGB(j, height - i - 1, oneColor.getRGB());
             }
         }
@@ -256,33 +257,6 @@ public class RasterLayer extends ImageLayer {
         return aImage;
     }
     
-    /**
-     * 
-     * @Title: getImageFromGridDataAndColorMap
-     * @Description: 通过grid数据和颜色集合获取BufferedImage对象
-     * @param gdata
-     * @param colors
-     * @return  BufferedImage
-     */
-    private BufferedImage getImageFromGridDataAndColorMap(GridArray gdata, Map<Integer,Color> colors) {
-        int width, height;
-        width = gdata.getXNum();
-        height = gdata.getYNum();
-        BufferedImage aImage = new BufferedImage(width, height, BufferedImage.TYPE_INT_ARGB);
-        int oneValue;
-        Color oneColor;
-        int n = colors.size();
-        for (int i = 0; i < height; i++) {
-            for (int j = 0; j < width; j++) {
-                oneValue = gdata.getValue(i, j).intValue();
-                oneColor = colors.get(oneValue);
-                if(oneColor == null) continue;
-                aImage.setRGB(j, height - i - 1, oneColor.getRGB());
-            }
-        }
-
-        return aImage;
-    }
 
     /**
      * Set color palette to a image from a palette file
@@ -291,12 +265,9 @@ public class RasterLayer extends ImageLayer {
      */
     @Override
     public void setPalette(String aFile) {
-//        List<Color> colors = this.getColorsFromPaletteFile(aFile);
-//        BufferedImage image = this.getImageFromGridData(_gridData, colors);
-        Map<Integer,Color> colors = this.getColorsMapFromPaletteFile(aFile);
-        BufferedImage image = this.getImageFromGridDataAndColorMap(_gridData, colors);
+        List<Color> colors = this.getColorsFromPaletteFile(aFile);
+        BufferedImage image = this.getImageFromGridData(_gridData, colors);
         this.setImage(image);
-
         LegendScheme ls = new LegendScheme(ShapeTypes.Image);
         ls.importFromPaletteFile_Unique(aFile);
         this.setLegendScheme(ls);

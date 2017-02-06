@@ -374,9 +374,9 @@ public class ImageLayer extends MapLayer {
 
                 aLine = aLine.trim();
                 dataArray = aLine.split("\\s+");
+                
                 colors.add(new Color(Integer.parseInt(dataArray[3]), Integer.parseInt(dataArray[2]),
-                        Integer.parseInt(dataArray[1])));
-
+                		Integer.parseInt(dataArray[1])));
                 aLine = sr.readLine();
             }
             sr.close();
@@ -390,45 +390,7 @@ public class ImageLayer extends MapLayer {
             return null;
         }
     }
-    
-    /**
-     * Get colors from palette file
-     *
-     * @param pFile Palette file path
-     * @return Map<Integer,Color>  色值 <==> 颜色对象
-     */
-    public Map<Integer,Color> getColorsMapFromPaletteFile(String pFile) {
-        BufferedReader sr = null;
-        try {
-            sr = new BufferedReader(new InputStreamReader(new FileInputStream(pFile)));
-            sr.readLine();
-            String aLine = sr.readLine();
-            String[] dataArray;
-            Map<Integer,Color> result = new HashMap<Integer,Color>();
-            while (aLine != null) {
-                if (aLine.isEmpty()) {
-                    aLine = sr.readLine();
-                    continue;
-                }
-
-                aLine = aLine.trim();
-                dataArray = aLine.split("\\s+");
-                result.put(Integer.parseInt(dataArray[0]),new Color(Integer.parseInt(dataArray[3]), Integer.parseInt(dataArray[2]),
-                        Integer.parseInt(dataArray[1])));
-                aLine = sr.readLine();
-            }
-            sr.close();
-
-            return result;
-        } catch (FileNotFoundException ex) {
-            Logger.getLogger(ImageLayer.class.getName()).log(Level.SEVERE, null, ex);
-            return null;
-        } catch (IOException ex) {
-            Logger.getLogger(ImageLayer.class.getName()).log(Level.SEVERE, null, ex);
-            return null;
-        }
-    }
-
+   
     /**
      * Set palette
      *

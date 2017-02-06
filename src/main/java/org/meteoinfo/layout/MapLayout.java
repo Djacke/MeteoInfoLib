@@ -2696,7 +2696,7 @@ public class MapLayout extends JPanel {
         g.fillRect(0, 0, _pageBounds.width, _pageBounds.height);
 
         for (LayoutElement aElement : _layoutElements) {
-//        	if(aElement instanceof LayoutGraphic) continue;
+        	if(aElement instanceof LayoutGraphic) continue;
             if (!aElement.isVisible()) {
                 continue;
             }
